@@ -1,4 +1,4 @@
-    :root {
+:root {
 
         /* MAIN BACKGROUND */
         --bg-dark: #f6f1e8;
@@ -3395,4 +3395,47 @@ section#stage4 .resume-grid {
     section#stage4 .skill-pill { padding: 0.4em 0.1em !important; font-size: 0.85em !important; }
     section#stage4.section .project-item { padding: 0.4em 0.5em !important; }
     section#stage4 .summary-card:nth-child(1) > div[style*="grid-template-columns"] { margin-top: 0.4em !important; gap: 0.4em !important; }
+}
+
+
+/* =====================================================================
+   OVERVIEW SUMMARY - CARD LIFT ANIMATION ON TABLET / PHONE
+   Earlier mobile rules forced every card to opacity:1 / transform:none,
+   which switched the animation off. This restores it (desktop untouched).
+   Cards start lowered + transparent, then lift in one by one when
+   script.js adds .active-overview as the section scrolls into view.
+   ===================================================================== */
+@media (max-width: 992px) {
+    section#stage4 .summary-card {
+        opacity: 0 !important;
+        transform: translateY(60px) !important;
+        transition: opacity 0.7s ease, transform 0.7s ease !important;
+    }
+
+    section#stage4.active-overview .summary-card {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    /* while script.js measures the layout, ignore the 60px start offset
+       (otherwise it counts as overflow and the font shrinks to its minimum) */
+    section#stage4.ov-fitting .summary-card {
+        transform: none !important;
+        transition: none !important;
+    }
+
+    section#stage4.active-overview .summary-card:nth-child(1) { transition-delay: 0.05s !important; }
+    section#stage4.active-overview .summary-card:nth-child(2) { transition-delay: 0.25s !important; }
+    section#stage4.active-overview .summary-card:nth-child(3) { transition-delay: 0.45s !important; }
+    section#stage4.active-overview .summary-card:nth-child(4) { transition-delay: 0.65s !important; }
+    section#stage4.active-overview .summary-card:nth-child(5) { transition-delay: 0.85s !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    section#stage4 .summary-card,
+    section#stage4.active-overview .summary-card {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
 }
