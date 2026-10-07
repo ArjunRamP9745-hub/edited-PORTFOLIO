@@ -156,21 +156,26 @@ function syncOverview() {
 
 const stage4 = document.getElementById('stage4');
 
-function showOverviewAnimation() {
-    const stage4Top = stage4.getBoundingClientRect().top;
-    const screenHeight = window.innerHeight;
-
-    // On phones/tablets the overview is a full screen tall, so wait until
-    // more of it is on screen, otherwise the animation finishes unseen.
-    const trigger = window.innerWidth <= 992 ? 0.5 : 0.85;
-
-    if (stage4Top < screenHeight * trigger) {
-        stage4.classList.add('active-overview');
-    }
+// The cards drop into place only once the Overview Summary section has been
+// reached (works for the laptop scroll column and for the phone page scroll).
+// When the section is scrolled completely out of view it resets, so it drops
+// again the next time it is reached.
+if (stage4) {
+    const overviewObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                stage4.classList.add('active-overview');
+            } else {
+                stage4.classList.remove('active-overview');
+            }
+        });
+    }, {
+        threshold: 0,
+        // section counts as "reached" when its top passes the upper ~60% of the screen
+        rootMargin: '0px 0px -40% 0px'
+    });
+    overviewObserver.observe(stage4);
 }
-
-window.addEventListener('scroll', showOverviewAnimation);
-window.addEventListener('load', showOverviewAnimation);
 
 window.addEventListener('DOMContentLoaded', syncOverview);
 const chatToggle = document.getElementById('chat-toggle');
