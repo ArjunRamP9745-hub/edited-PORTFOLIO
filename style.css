@@ -3399,39 +3399,50 @@ section#stage4 .resume-grid {
 
 
 /* =====================================================================
-   OVERVIEW SUMMARY - CARD LIFT ANIMATION ON TABLET / PHONE
-   Earlier mobile rules forced every card to opacity:1 / transform:none,
-   which switched the animation off. This restores it (desktop untouched).
-   Cards start lowered + transparent, then lift in one by one when
-   script.js adds .active-overview as the section scrolls into view.
+   OVERVIEW SUMMARY - DROP-DOWN ANIMATION (laptop + mobile)
+   - the section keeps its normal fade-in
+   - when the section is reached (script.js adds .active-overview) the
+     title and then each card DROP DOWN from above into place, one by one,
+     with a small soft bounce as each one lands
    ===================================================================== */
-@media (max-width: 992px) {
-    section#stage4 .summary-card {
-        opacity: 0 !important;
-        transform: translateY(60px) !important;
-        transition: opacity 0.7s ease, transform 0.7s ease !important;
-    }
+section#stage4 h2 {
+    opacity: 0;
+    transform: translateY(-40px);
+    transition: opacity 0.6s ease, transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 
-    section#stage4.active-overview .summary-card {
-        opacity: 1 !important;
-        transform: translateY(0) !important;
-    }
+section#stage4.active-overview h2 {
+    opacity: 1;
+    transform: translateY(0);
+}
 
-    /* while script.js measures the layout, ignore the 60px start offset
-       (otherwise it counts as overflow and the font shrinks to its minimum) */
-    section#stage4.ov-fitting .summary-card {
-        transform: none !important;
-        transition: none !important;
-    }
+section#stage4 .summary-card {
+    opacity: 0 !important;
+    transform: translateY(-110px) scale(0.96) !important;
+    transform-origin: top center;
+    transition: opacity 0.6s ease, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
 
-    section#stage4.active-overview .summary-card:nth-child(1) { transition-delay: 0.05s !important; }
-    section#stage4.active-overview .summary-card:nth-child(2) { transition-delay: 0.25s !important; }
-    section#stage4.active-overview .summary-card:nth-child(3) { transition-delay: 0.45s !important; }
-    section#stage4.active-overview .summary-card:nth-child(4) { transition-delay: 0.65s !important; }
-    section#stage4.active-overview .summary-card:nth-child(5) { transition-delay: 0.85s !important; }
+section#stage4.active-overview .summary-card {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+section#stage4.active-overview .summary-card:nth-child(1) { transition-delay: 0.15s !important; }
+section#stage4.active-overview .summary-card:nth-child(2) { transition-delay: 0.40s !important; }
+section#stage4.active-overview .summary-card:nth-child(3) { transition-delay: 0.65s !important; }
+section#stage4.active-overview .summary-card:nth-child(4) { transition-delay: 0.90s !important; }
+section#stage4.active-overview .summary-card:nth-child(5) { transition-delay: 1.15s !important; }
+
+/* while script.js measures the layout, ignore the start offset */
+section#stage4.ov-fitting h2,
+section#stage4.ov-fitting .summary-card {
+    transform: none !important;
+    transition: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
+    section#stage4 h2,
     section#stage4 .summary-card,
     section#stage4.active-overview .summary-card {
         opacity: 1 !important;
