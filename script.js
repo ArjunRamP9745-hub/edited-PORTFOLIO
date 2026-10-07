@@ -160,7 +160,11 @@ function showOverviewAnimation() {
     const stage4Top = stage4.getBoundingClientRect().top;
     const screenHeight = window.innerHeight;
 
-    if (stage4Top < screenHeight * 0.85) {
+    // On phones/tablets the overview is a full screen tall, so wait until
+    // more of it is on screen, otherwise the animation finishes unseen.
+    const trigger = window.innerWidth <= 992 ? 0.5 : 0.85;
+
+    if (stage4Top < screenHeight * trigger) {
         stage4.classList.add('active-overview');
     }
 }
@@ -517,10 +521,14 @@ flyingObserver.observe(stage4Section);
     function fits() {
         if (grid.scrollHeight > grid.clientHeight + 1 ||
             grid.scrollWidth > grid.clientWidth + 1) return false;
-        // every card (and the education boxes inside) must fit inside its own box
-        const cards = grid.querySelectorAll('.summary-card');
-        for (const card of cards) {
-            if (card.scrollHeight > card.clientHeight + 1) return false;
+        // On desktop/laptop the overview has a fixed height, so every card
+        // (and the education boxes inside) must fit inside its own box.
+        // On phones (<=768px) the section grows to its natural height, so skip this.
+        if (window.innerWidth > 768) {
+            const cards = grid.querySelectorAll('.summary-card');
+            for (const card of cards) {
+                if (card.scrollHeight > card.clientHeight + 1) return false;
+            }
         }
         return true;
     }
